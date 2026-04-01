@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Малятко-Навчайко 🐣</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky: #6EC6FF;
+  --sun: #FFD93D;
+  --orange: #FF6B35;
+  --pink: #FF6BA8;
+  --green: #4CAF50;
+  --mint: #26C6DA;
+  --purple: #9C6FE4;
+  --red: #FF5252;
+  --bg: #FFF8F0;
+  --card: #FFFFFF;
+  --text: #2D2A4A;
+  --muted: #9A97B5;
+  --shadow: 0 6px 24px rgba(45,42,74,0.13);
+  --shadow-sm: 0 3px 10px rgba(45,42,74,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  overflow:hidden;
+  max-width:480px;
+  margin:0 auto;
+  position:relative;
+}
+
+/* ══ SCREEN SYSTEM ══ */
+.screen{display:none;flex-direction:column;height:100%;overflow:hidden}
+.screen.active{display:flex}
+
+/* ══ HOME ══ */
+#home{background:linear-gradient(160deg,#E8F4FF 0%,#FFF0FA 50%,#FFFBE8 100%)}
+.home-header{
+  padding:24px 20px 0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.app-logo{font-family:'Fredoka One',cursive;font-size:26px;color:var(--purple)}
+.xp-pill{
+  background:var(--sun);
+  border-radius:20px;padding:6px 14px;
+  font-size:14px;font-weight:800;color:#7A5800;
+  display:flex;align-items:center;gap:5px;
+  box-shadow:0 3px 0 #E5C000;
+}
+.mascot-area{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:10px 20px 0;gap:8px;
+}
+.mascot-wrap{position:relative;width:140px;height:140px}
+.mascot-wrap svg{width:140px;height:140px;animation:mascotFloat 3s ease-in-out infinite}
+@keyframes mascotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.speech-bubble{
+  background:#fff;border-radius:20px;padding:10px 16px;
+  font-size:15px;font-weight:700;color:var(--text);
+  box-shadow:var(--shadow-sm);max-width:260px;text-align:center;
+  position:relative;
+}
+.speech-bubble::before{
+  content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+  border:10px solid transparent;border-top-color:#fff;border-bottom:0;
+}
+.home-title{font-family:'Fredoka One',cursive;font-size:28px;color:var(--text);text-align:center}
+.home-title span{color:var(--purple)}
+
+/* ══ SUBJECT CARDS ══ */
+.subjects{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 16px 8px}
+.subj-card{
+  border-radius:22px;padding:14px 8px;display:flex;flex-direction:column;
+  align-items:center;gap:6px;cursor:pointer;
+  box-shadow:0 5px 0 rgba(0,0,0,0.12);
+  transition:transform .12s,box-shadow .12s;
+  position:relative;overflow:hidden;
+  border:none;font-family:'Nunito',sans-serif;
+}
+.subj-card:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,0.12)}
+.subj-card-abc{background:linear-gradient(135deg,#FF6B35,#FF9A7A)}
+.subj-card-num{background:linear-gradient(135deg,#9C6FE4,#C4A0FF)}
+.subj-card-shp{background:linear-gradient(135deg,#26C6DA,#70E8F5)}
+.subj-card-ach{background:linear-gradient(135deg,#FFD93D,#FFB300)}
+.subj-icon{font-size:38px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.2))}
+.subj-name{font-family:'Fredoka One',cursive;font-size:14px;color:#fff;text-align:center}
+.subj-prog{width:100%;height:6px;background:rgba(255,255,255,0.3);border-radius:4px;overflow:hidden}
+.subj-prog-fill{height:6px;background:#fff;border-radius:4px;transition:width .5s ease}
+.subj-lock{
+  position:absolute;inset:0;background:rgba(255,255,255,0.4);
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  border-radius:22px;
+}
+
+/* ══ STREAK + LEVEL ══ */
+.bottom-stats{
+  display:flex;gap:10px;padding:0 16px 16px;
+}
+.stat-chip{
+  flex:1;background:#fff;border-radius:16px;padding:10px 12px;
+  display:flex;align-items:center;gap:8px;box-shadow:var(--shadow-sm);
+}
+.stat-chip-icon{font-size:24px}
+.stat-chip-label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.stat-chip-val{font-family:'Fredoka One',cursive;font-size:20px;color:var(--text)}
+
+/* ══ GAME SCREEN ══ */
+#game{background:var(--bg)}
+.game-topbar{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px 8px;
+  background:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.07);
+  flex-shrink:0;
+}
+.back-btn{
+  width:36px;height:36px;border-radius:12px;border:none;
+  background:var(--bg);cursor:pointer;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Nunito',sans-serif;
+}
+.game-subject-name{font-family:'Fredoka One',cursive;font-size:18px;flex:1}
+.lives{display:flex;gap:3px}
+.heart{font-size:20px;transition:transform .2s}
+.heart.lost{opacity:.25;transform:scale(.85)}
+.prog-bar-wrap{padding:6px 16px 0;flex-shrink:0}
+.prog-bar-bg{height:8px;background:#EEE;border-radius:6px;overflow:hidden}
+.prog-bar-fg{height:8px;border-radius:6px;transition:width .4s ease}
+.prog-bar-abc{background:linear-gradient(90deg,#FF6B35,#FF9A7A)}
+.prog-bar-num{background:linear-gradient(90deg,#9C6FE4,#C4A0FF)}
+.prog-bar-shp{background:linear-gradient(90deg,#26C6DA,#70E8F5)}
+
+/* ══ QUESTION CARD ══ */
+.question-area{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;padding:14px 16px 10px;gap:12px;
+  overflow:hidden;
+}
+.question-label{
+  font-size:13px;font-weight:800;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;
+}
+.q-card{
+  width:100%;background:#fff;border-radius:28px;
+  display:flex;flex-direction:column;align-items:center;
+  padding:20px 16px 16px;
+  box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+  flex-shrink:0;
+}
+.q-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:5px;
+  border-radius:28px 28px 0 0;
+}
+.q-card.abc::before{background:linear-gradient(90deg,#FF6B35,#FF9A7A)}
+.q-card.num::before{background:linear-gradient(90deg,#9C6FE4,#C4A0FF)}
+.q-card.shp::before{background:linear-gradient(90deg,#26C6DA,#70E8F5)}
+
+.main-letter{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(80px,20vw,120px);
+  line-height:1;
+  color:var(--orange);
+}
+.main-letter.num-color{color:var(--purple)}
+.main-letter.shp-color{color:var(--mint)}
+.main-letter.pop{animation:letterPop .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes letterPop{0%{transform:scale(.3) rotate(-15deg);opacity:0}60%{transform:scale(1.15) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+
+.pic-hint{display:flex;flex-direction:column;align-items:center;gap:3px}
+.pic-emoji{font-size:clamp(36px,10vw,52px);line-height:1}
+.pic-word{font-size:15px;font-weight:800;color:var(--text)}
+.pic-word b{color:var(--orange)}
+.pic-word b.num-b{color:var(--purple)}
+.pic-word b.shp-b{color:var(--mint)}
+
+.divline{width:2px;height:56px;background:var(--bg);border-radius:2px;margin:0 14px;flex-shrink:0}
+.letter-row{display:flex;align-items:center;justify-content:center;width:100%}
+
+/* ══ SHAPE DISPLAY ══ */
+.shape-display{
+  display:flex;align-items:center;justify-content:center;
+  width:110px;height:110px;
+}
+.shape-display svg{width:100%;height:100%}
+
+/* ══ NUMBER DOTS ══ */
+.num-dots{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;max-width:120px}
+.num-dot{width:18px;height:18px;border-radius:50%;background:var(--purple)}
+
+/* ══ CHOICES ══ */
+.choices-wrap{width:100%;flex-shrink:0}
+.choices-label{font-size:13px;font-weight:800;color:var(--muted);padding:0 4px 6px;text-transform:uppercase;letter-spacing:.06em}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice{
+  background:#fff;border:3px solid #ECEDF5;border-radius:20px;
+  padding:12px 8px 9px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  transition:transform .12s,border-color .15s,background .15s;
+  box-shadow:0 4px 0 #ECEDF5;
+  font-family:'Nunito',sans-serif;
+  position:relative;overflow:hidden;
+  user-select:none;
+}
+.choice:active:not(.locked){transform:scale(.92);box-shadow:0 1px 0 #ECEDF5}
+.choice-main{font-family:'Fredoka One',cursive;font-size:clamp(26px,8vw,38px);color:var(--text);line-height:1.1}
+.choice-sub{font-size:11px;font-weight:800;color:var(--muted);text-align:center;line-height:1.2}
+.choice.correct{background:#E8FFF2;border-color:#34D399;box-shadow:0 4px 0 #34D399}
+.choice.correct .choice-main{color:#065F46}
+.choice.correct .choice-sub{color:#059669}
+.choice.wrong{background:#FFF0F0;border-color:#FF5252;animation:shake .4s;box-shadow:0 4px 0 #FF5252}
+.choice.wrong .choice-main{color:#991B1B}
+.choice.dim{opacity:.35;pointer-events:none}
+.choice.locked{pointer-events:none}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+/* shape inside choice */
+.choice-shape svg{width:34px;height:34px}
+
+/* ══ NEXT BUTTON ══ */
+.next-wrap{padding:8px 16px 16px;flex-shrink:0}
+.next-btn{
+  width:100%;padding:15px;
+  background:linear-gradient(135deg,#FF6B35,#FF9A7A);
+  color:#fff;font-size:18px;font-weight:900;
+  font-family:'Fredoka One',cursive;
+  border:none;border-radius:20px;cursor:pointer;
+  box-shadow:0 5px 0 #D44E1A;
+  opacity:0;pointer-events:none;
+  transform:translateY(10px);
+  transition:opacity .3s,transform .3s;
+  letter-spacing:.04em;
+}
+.next-btn.num-style{background:linear-gradient(135deg,#9C6FE4,#C4A0FF);box-shadow:0 5px 0 #7048C0}
+.next-btn.shp-style{background:linear-gradient(135deg,#26C6DA,#70E8F5);box-shadow:0 5px 0 #0EA5B5}
+.next-btn.show{opacity:1;pointer-events:all;transform:translateY(0)}
+.next-btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+
+/* ══ TOAST ══ */
+.toast{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(.6);
+  background:#fff;border-radius:28px;padding:18px 28px;
+  text-align:center;opacity:0;pointer-events:none;z-index:500;
+  box-shadow:0 16px 48px rgba(0,0,0,.18);
+  transition:all .28s cubic-bezier(.34,1.56,.64,1);
+  min-width:180px;
+}
+.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.toast-emoji{font-size:52px;line-height:1.15;display:block}
+.toast-text{font-family:'Fredoka One',cursive;font-size:20px;margin-top:4px}
+.toast-xp{font-size:13px;font-weight:800;color:var(--muted);margin-top:2px}
+
+/* ══ ACHIEVEMENTS SCREEN ══ */
+#achievements{background:linear-gradient(160deg,#F0E8FF 0%,#FFF0FA 100%)}
+.ach-header{
+  padding:16px 20px 12px;display:flex;align-items:center;gap:12px;
+  background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.07);
+  flex-shrink:0;
+}
+.ach-title{font-family:'Fredoka One',cursive;font-size:22px;color:var(--purple)}
+.ach-list{flex:1;overflow-y:auto;padding:12px 16px 24px;display:flex;flex-direction:column;gap:10px}
+.ach-card{
+  background:#fff;border-radius:20px;padding:14px 16px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:var(--shadow-sm);
+  transition:transform .15s;
+}
+.ach-icon-wrap{
+  width:52px;height:52px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;flex-shrink:0;
+}
+.ach-icon-wrap.locked{background:#F5F5F5;filter:grayscale(1) opacity(.5)}
+.ach-icon-wrap.unlocked{animation:achUnlock .5s ease}
+@keyframes achUnlock{0%{transform:scale(0) rotate(-20deg)}60%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+.ach-info{flex:1}
+.ach-name{font-family:'Fredoka One',cursive;font-size:16px;color:var(--text)}
+.ach-desc{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
+.ach-badge{
+  font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;
+  white-space:nowrap;
+}
+.ach-badge.done{background:#E8FFF2;color:#065F46}
+.ach-badge.todo{background:#F5F5F5;color:var(--muted)}
+.ach-prog-bar{width:100%;height:5px;background:#F0F0F0;border-radius:3px;margin-top:5px;overflow:hidden}
+.ach-prog-fill{height:5px;border-radius:3px;transition:width .6s ease;background:linear-gradient(90deg,var(--purple),#C4A0FF)}
+
+/* ══ FINISH ══ */
+.finish-overlay{
+  position:fixed;inset:0;background:rgba(45,42,74,.6);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  z-index:400;padding:24px;
+}
+.finish-overlay.show{display:flex}
+.finish-card{
+  background:#fff;border-radius:32px;padding:28px 24px;
+  text-align:center;width:100%;max-width:360px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+  animation:finishIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes finishIn{0%{transform:scale(.5) translateY(40px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
+.finish-trophy{font-size:72px;line-height:1.2;display:block}
+.finish-title{font-family:'Fredoka One',cursive;font-size:28px;color:var(--text);margin-top:4px}
+.finish-score{font-size:16px;color:var(--muted);font-weight:700;margin:6px 0 16px}
+.finish-score b{color:var(--text);font-size:20px}
+.finish-xp{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--sun);border-radius:16px;padding:8px 16px;
+  font-size:16px;font-weight:800;color:#7A5800;margin-bottom:16px;
+}
+.finish-btns{display:flex;gap:10px}
+.finish-btn{
+  flex:1;padding:14px;border:none;border-radius:18px;cursor:pointer;
+  font-family:'Fredoka One',cursive;font-size:16px;
+  box-shadow:0 4px 0 rgba(0,0,0,.12);
+}
+.finish-btn-home{background:#F5F5F5;color:var(--text)}
+.finish-btn-again{background:linear-gradient(135deg,#FF6B35,#FF9A7A);color:#fff;box-shadow:0 4px 0 #D44E1A}
+
+/* ══ ACHIEVEMENT POPUP ══ */
+.ach-popup{
+  position:fixed;bottom:-120px;left:50%;transform:translateX(-50%);
+  background:#fff;border-radius:24px;padding:14px 20px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 12px 40px rgba(0,0,0,.18);
+  z-index:600;transition:bottom .4s cubic-bezier(.34,1.56,.64,1);
+  max-width:340px;width:calc(100% - 32px);
+}
+.ach-popup.show{bottom:24px}
+.ach-popup-icon{font-size:36px}
+.ach-popup-text{}
+.ach-popup-label{font-size:11px;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:.08em}
+.ach-popup-name{font-family:'Fredoka One',cursive;font-size:16px;color:var(--text)}
+
+/* ══ CONFETTI ══ */
+.cf{position:fixed;top:-20px;width:10px;height:10px;pointer-events:none;z-index:700;border-radius:2px;animation:cfFall linear forwards}
+@keyframes cfFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(600deg);opacity:0}}
+
+/* ══ SCROLLBAR ══ */
+.ach-list::-webkit-scrollbar{width:4px}
+.ach-list::-webkit-scrollbar-thumb{background:#DDD;border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div id="home" class="screen active">
+  <div class="home-header">
+    <div class="app-logo">🌟 Навчайко</div>
+    <div class="xp-pill">⭐ <span id="totalXP">0</span> XP</div>
+  </div>
+
+  <div class="mascot-area">
+    <div class="mascot-wrap">
+      <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+        <!-- body -->
+        <ellipse cx="70" cy="95" rx="38" ry="40" fill="#FFB347"/>
+        <!-- belly -->
+        <ellipse cx="70" cy="102" rx="24" ry="26" fill="#FFD093"/>
+        <!-- head -->
+        <circle cx="70" cy="58" r="36" fill="#FFB347"/>
+        <!-- ears -->
+        <circle cx="40" cy="30" r="14" fill="#FFB347"/>
+        <circle cx="100" cy="30" r="14" fill="#FFB347"/>
+        <circle cx="40" cy="30" r="8" fill="#FFD4A3"/>
+        <circle cx="100" cy="30" r="8" fill="#FFD4A3"/>
+        <!-- face bg -->
+        <ellipse cx="70" cy="65" rx="20" ry="16" fill="#FFD4A3"/>
+        <!-- eyes -->
+        <circle cx="59" cy="52" r="7" fill="#fff"/>
+        <circle cx="81" cy="52" r="7" fill="#fff"/>
+        <circle cx="61" cy="53" r="4" fill="#2D2A4A"/>
+        <circle cx="83" cy="53" r="4" fill="#2D2A4A"/>
+        <circle cx="62" cy="52" r="1.5" fill="#fff"/>
+        <circle cx="84" cy="52" r="1.5" fill="#fff"/>
+        <!-- nose -->
+        <ellipse cx="70" cy="62" rx="5" ry="3.5" fill="#E8824A"/>
+        <!-- smile -->
+        <path d="M60,69 Q70,77 80,69" fill="none" stroke="#E8824A" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- cheeks -->
+        <circle cx="49" cy="63" r="7" fill="#FF9A7A" opacity=".45"/>
+        <circle cx="91" cy="63" r="7" fill="#FF9A7A" opacity=".45"/>
+        <!-- paws -->
+        <ellipse cx="38" cy="112" rx="16" ry="11" fill="#FFB347"/>
+        <ellipse cx="102" cy="112" rx="16" ry="11" fill="#FFB347"/>
+        <!-- feet -->
+        <ellipse cx="55" cy="133" rx="14" ry="9" fill="#FFB347"/>
+        <ellipse cx="85" cy="133" rx="14" ry="9" fill="#FFB347"/>
+        <!-- grad cap -->
+        <rect x="44" y="24" width="52" height="8" rx="4" fill="#9C6FE4"/>
+        <rect x="60" y="16" width="20" height="10" rx="3" fill="#9C6FE4"/>
+        <line x1="94" y1="28" x2="100" y2="38" stroke="#FFD93D" stroke-width="2"/>
+        <circle cx="101" cy="40" r="4" fill="#FFD93D"/>
+      </svg>
+    </div>
+    <div class="speech-bubble" id="speechBubble">Привіт! Давай вчитись разом!</div>
+    <div class="home-title">Обери <span>тему</span> уроку</div>
+  </div>
+
+  <div class="subjects">
+    <button class="subj-card subj-card-abc" onclick="startSubject('abc')">
+      <div class="subj-icon">🔤</div>
+      <div class="subj-name">Абетка</div>
+      <div class="subj-prog"><div class="subj-prog-fill" id="prog-abc" style="width:0%"></div></div>
+    </button>
+    <button class="subj-card subj-card-num" onclick="startSubject('num')">
+      <div class="subj-icon">🔢</div>
+      <div class="subj-name">Цифри</div>
+      <div class="subj-prog"><div class="subj-prog-fill" id="prog-num" style="width:0%"></div></div>
+    </button>
+    <button class="subj-card subj-card-shp" onclick="startSubject('shp')">
+      <div class="subj-icon">🔷</div>
+      <div class="subj-name">Фігури</div>
+      <div class="subj-prog"><div class="subj-prog-fill" id="prog-shp" style="width:0%"></div></div>
+    </button>
+  </div>
+
+  <div class="bottom-stats">
+    <div class="stat-chip">
+      <div class="stat-chip-icon">🔥</div>
+      <div>
+        <div class="stat-chip-label">Серія</div>
+        <div class="stat-chip-val" id="streakHome">0</div>
+      </div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-chip-icon">🏆</div>
+      <div>
+        <div class="stat-chip-label">Нагороди</div>
+        <div class="stat-chip-val" id="achCountHome">0/12</div>
+      </div>
+    </div>
+    <button class="stat-chip" onclick="showAchievements()" style="background:linear-gradient(135deg,#F0E8FF,#FFE8F4);cursor:pointer;border:none;font-family:'Nunito',sans-serif">
+      <div class="stat-chip-icon">🌟</div>
+      <div>
+        <div class="stat-chip-label">Усі</div>
+        <div class="stat-chip-val" style="font-size:14px;color:var(--purple)">нагороди</div>
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════ GAME ══════════════ -->
+<div id="game" class="screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="game-subject-name" id="gameSubjectName">Абетка</div>
+    <div class="lives" id="lives">
+      <span class="heart">❤️</span><span class="heart">❤️</span><span class="heart">❤️</span>
+    </div>
+  </div>
+  <div class="prog-bar-wrap">
+    <div class="prog-bar-bg"><div class="prog-bar-fg" id="gameProgBar" style="width:0%"></div></div>
+  </div>
+
+  <div class="question-area">
+    <div class="question-label" id="qLabel">Яка це літера?</div>
+    <div class="q-card abc" id="qCard">
+      <div class="letter-row" id="letterRow">
+        <div class="main-letter" id="mainLetter">А</div>
+        <div class="divline" id="divLine"></div>
+        <div class="pic-hint" id="picHint">
+          <div class="pic-emoji" id="picEmoji">🍉</div>
+          <div class="pic-word" id="picWord"><b>А</b>рбуз</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="choices-wrap">
+      <div class="choices-label">Обери правильну відповідь:</div>
+      <div class="choices" id="choices"></div>
+    </div>
+  </div>
+
+  <div class="next-wrap">
+    <button class="next-btn" id="nextBtn" onclick="nextQ()">Далі →</button>
+  </div>
+</div>
+
+<!-- ══════════════ ACHIEVEMENTS ══════════════ -->
+<div id="achievements" class="screen">
+  <div class="ach-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="ach-title">🏆 Мої нагороди</div>
+  </div>
+  <div class="ach-list" id="achList"></div>
+</div>
+
+<!-- ══════════════ TOAST ══════════════ -->
+<div class="toast" id="toast">
+  <span class="toast-emoji" id="toastEmoji">🎉</span>
+  <div class="toast-text" id="toastText">Молодець!</div>
+  <div class="toast-xp" id="toastXP">+10 XP</div>
+</div>
+
+<!-- ══════════════ FINISH ══════════════ -->
+<div class="finish-overlay" id="finishOverlay">
+  <div class="finish-card">
+    <span class="finish-trophy" id="finTrophy">🏆</span>
+    <div class="finish-title" id="finTitle">Чудово!</div>
+    <div class="finish-score" id="finScore">Правильних: <b>10/10</b></div>
+    <div class="finish-xp" id="finXP">⭐ +100 XP</div>
+    <div class="finish-btns">
+      <button class="finish-btn finish-btn-home" onclick="goHome()">🏠 Додому</button>
+      <button class="finish-btn finish-btn-again" id="finAgainBtn" onclick="replaySubject()">🔄 Ще раз</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ACH POPUP ══════════════ -->
+<div class="ach-popup" id="achPopup">
+  <div class="ach-popup-icon" id="achPopIcon">🥇</div>
+  <div class="ach-popup-text">
+    <div class="ach-popup-label">Нова нагорода!</div>
+    <div class="ach-popup-name" id="achPopName">Перші кроки</div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   DATA
+═══════════════════════════════════════ */
+const ALPHA = [
+  {l:'А',word:'Арбуз',emoji:'🍉'},
+  {l:'Б',word:'Бджола',emoji:'🐝'},
+  {l:'В',word:'Вовк',emoji:'🐺'},
+  {l:'Г',word:'Гриб',emoji:'🍄'},
+  {l:'Ґ',word:'Ґудзик',emoji:'🔘'},
+  {l:'Д',word:'Дерево',emoji:'🌳'},
+  {l:'Е',word:'Енот',emoji:'🦝'},
+  {l:'Є',word:'Єжак',emoji:'🦔'},
+  {l:'Ж',word:'Жираф',emoji:'🦒'},
+  {l:'З',word:'Зірка',emoji:'⭐'},
+  {l:'И',word:'Іграшка',emoji:'🧸'},
+  {l:'І',word:'Індик',emoji:'🦃'},
+  {l:'Ї',word:'Їжак',emoji:'🦔'},
+  {l:'Й',word:'Йогурт',emoji:'🥛'},
+  {l:'К',word:'Кіт',emoji:'🐱'},
+  {l:'Л',word:'Лисиця',emoji:'🦊'},
+  {l:'М',word:'Миша',emoji:'🐭'},
+  {l:'Н',word:'Носоріг',emoji:'🦏'},
+  {l:'О',word:'Олень',emoji:'🦌'},
+  {l:'П',word:'Пінгвін',emoji:'🐧'},
+  {l:'Р',word:'Ракета',emoji:'🚀'},
+  {l:'С',word:'Слон',emoji:'🐘'},
+  {l:'Т',word:'Тигр',emoji:'🐯'},
+  {l:'У',word:'Удав',emoji:'🐍'},
+  {l:'Ф',word:'Фламінго',emoji:'🦩'},
+  {l:'Х',word:'Хомяк',emoji:'🐹'},
+  {l:'Ц',word:'Цибуля',emoji:'🧅'},
+  {l:'Ч',word:'Черепаха',emoji:'🐢'},
+  {l:'Ш',word:'Шапка',emoji:'🎩'},
+  {l:'Щ',word:'Щука',emoji:'🐟'},
+  {l:'Ь',word:'Тінь',emoji:'🌙'},
+  {l:'Ю',word:'Юла',emoji:'🌀'},
+  {l:'Я',word:'Яблуко',emoji:'🍎'},
+];
+
+const NUMS = [
+  {l:'1',word:'Одне яблуко',emoji:'🍎',
+   dots:1,
+   svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="72" fill="#9C6FE4">1</text>'},
+  {l:'2',word:'Два зайчики',emoji:'🐰',dots:2,svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="72" fill="#9C6FE4">2</text>'},
+  {l:'3',word:'Три зірки',emoji:'⭐',dots:3,svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="72" fill="#9C6FE4">3</text>'},
+  {l:'4',word:'Чотири лапи',emoji:'🐾',dots:4,svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="72" fill="#9C6FE4">4</text>'},
+  {l:'5',word:"П'ять пальців",emoji:'✋',dots:5,svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="72" fill="#9C6FE4">5</text>'},
+  {l:'6',word:'Шість ніг',emoji:'🐛',dots:6,svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="72" fill="#9C6FE4">6</text>'},
+  {l:'7',word:'Сім кольорів',emoji:'🌈',dots:7,svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="72" fill="#9C6FE4">7</text>'},
+  {l:'8',word:'Вісім ніжок',emoji:'🕷️',dots:8,svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="72" fill="#9C6FE4">8</text>'},
+  {l:'9',word:"Дев'ять хмарок",emoji:'☁️',dots:9,svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="72" fill="#9C6FE4">9</text>'},
+  {l:'10',word:'Десять пальців',emoji:'🙌',dots:10,svg:'<text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-family="Fredoka One,cursive" font-size="62" fill="#9C6FE4">10</text>'},
+];
+
+const SHAPES = [
+  {l:'Коло',word:'Колесо',emoji:'⚙️',
+   svg:'<circle cx="50" cy="50" r="38" fill="#26C6DA" stroke="#0EA5B5" stroke-width="3"/>'},
+  {l:'Квадрат',word:'Вікно',emoji:'🪟',
+   svg:'<rect x="12" y="12" width="76" height="76" rx="6" fill="#FF6B35" stroke="#D44E1A" stroke-width="3"/>'},
+  {l:'Трикутник',word:'Гора',emoji:'⛰️',
+   svg:'<polygon points="50,8 92,88 8,88" fill="#9C6FE4" stroke="#7048C0" stroke-width="3" stroke-linejoin="round"/>'},
+  {l:'Прямокутник',word:'Книжка',emoji:'📚',
+   svg:'<rect x="8" y="22" width="84" height="56" rx="6" fill="#4CAF50" stroke="#2E7D32" stroke-width="3"/>'},
+  {l:'Ромб',word:'Повітряний змій',emoji:'🪁',
+   svg:'<polygon points="50,6 92,50 50,94 8,50" fill="#FFD93D" stroke="#E5C000" stroke-width="3"/>'},
+  {l:'Зірка',word:'Зірочка',emoji:'⭐',
+   svg:'<polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#FF6B8E" stroke="#CC4466" stroke-width="2"/>'},
+  {l:'Серце',word:'Любов',emoji:'❤️',
+   svg:'<path d="M50,80 C20,60 5,40 5,28 C5,16 15,8 27,8 C37,8 46,15 50,22 C54,15 63,8 73,8 C85,8 95,16 95,28 C95,40 80,60 50,80Z" fill="#FF5252" stroke="#CC0000" stroke-width="2"/>'},
+  {l:'Овал',word:'Яйце',emoji:'🥚',
+   svg:'<ellipse cx="50" cy="50" rx="40" ry="28" fill="#FFB347" stroke="#E8824A" stroke-width="3"/>'},
+];
+
+/* ═══════════════════════════════════════
+   ACHIEVEMENTS
+═══════════════════════════════════════ */
+const ACH_DEFS = [
+  {id:'first_abc',icon:'🔤',name:'Перша буква',desc:'Пройди перший урок абетки',color:'#FFE8D6',check:s=>s.abc.sessions>=1},
+  {id:'abc_5',icon:'📖',name:'Читайко',desc:'Правильно відповів 5 разів на абетку',color:'#FFE8D6',check:s=>s.abc.correct>=5},
+  {id:'abc_all',icon:'🎓',name:'Знавець абетки',desc:'Пройди всі 33 літери',color:'#FFE8D6',check:s=>s.abc.correct>=33},
+  {id:'first_num',icon:'🔢',name:'Рахівничок',desc:'Пройди перший урок цифр',color:'#EDE0FF',check:s=>s.num.sessions>=1},
+  {id:'num_all',icon:'🧮',name:'Математик',desc:'Вивчи всі цифри від 1 до 10',color:'#EDE0FF',check:s=>s.num.correct>=10},
+  {id:'first_shp',icon:'🔷',name:'Геометрик',desc:'Пройди перший урок фігур',color:'#E0F8FA',check:s=>s.shp.sessions>=1},
+  {id:'shp_all',icon:'🎨',name:'Художник',desc:'Вивчи всі 8 фігур',color:'#E0F8FA',check:s=>s.shp.correct>=8},
+  {id:'streak_3',icon:'🔥',name:'Тричі поспіль',desc:'3 правильних відповіді підряд',color:'#FFF3CD',check:s=>s.maxStreak>=3},
+  {id:'streak_5',icon:'⚡',name:'Блискавка',desc:'5 правильних відповідей підряд',color:'#FFF3CD',check:s=>s.maxStreak>=5},
+  {id:'xp_50',icon:'⭐',name:'Зірочка',desc:'Набери 50 XP',color:'#FFFDE7',check:s=>s.xp>=50},
+  {id:'xp_200',icon:'🌟',name:'Зоряний',desc:'Набери 200 XP',color:'#FFFDE7',check:s=>s.xp>=200},
+  {id:'all_subjects',icon:'🏆',name:'Чемпіон!',desc:'Пройди хоча б раз усі три теми',color:'#E8F5E9',check:s=>s.abc.sessions>=1&&s.num.sessions>=1&&s.shp.sessions>=1},
+];
+
+/* ═══════════════════════════════════════
+   STATE & STORAGE
+═══════════════════════════════════════ */
+function defaultState(){
+  return {
+    xp:0,streak:0,maxStreak:0,
+    abc:{correct:0,sessions:0,best:0},
+    num:{correct:0,sessions:0,best:0},
+    shp:{correct:0,sessions:0,best:0},
+    unlockedAch:[],
+  };
+}
+let S = defaultState();
+function save(){ try{ localStorage.setItem('navchajko_v2',JSON.stringify(S)); }catch(e){} }
+function load(){
+  try{
+    const raw = localStorage.getItem('navchajko_v2');
+    if(raw){ const d=JSON.parse(raw); S={...defaultState(),...d}; }
+  }catch(e){}
+}
+
+/* ═══════════════════════════════════════
+   GAME STATE
+═══════════════════════════════════════ */
+let CUR_SUBJ='abc';
+let queue=[],cur=null,qNum=0,correct=0,lives=3,streak=0,locked=false;
+let sessionXP=0;
+
+function shuffle(a){return[...a].sort(()=>Math.random()-.5)}
+
+/* ═══════════════════════════════════════
+   AUDIO
+═══════════════════════════════════════ */
+let actx;
+function tone(f,d,t='sine'){
+  try{
+    if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.connect(g);g.connect(actx.destination);
+    o.type=t;o.frequency.value=f;
+    g.gain.setValueAtTime(.2,actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d);
+    o.start();o.stop(actx.currentTime+d);
+  }catch(e){}
+}
+function playOK(){tone(660,.08);setTimeout(()=>tone(880,.12),90);}
+function playWrong(){tone(220,.3,'sawtooth');}
+
+/* ═══════════════════════════════════════
+   NAVIGATE
+═══════════════════════════════════════ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function goHome(){
+  document.getElementById('finishOverlay').classList.remove('show');
+  showScreen('home');
+  updateHomeUI();
+}
+function showAchievements(){
+  renderAchList();
+  showScreen('achievements');
+}
+
+/* ═══════════════════════════════════════
+   HOME UI
+═══════════════════════════════════════ */
+const SPEECHES = [
+  'Привіт! Давай вчитись разом!',
+  'Ти молодець! Продовжуй!',
+  'Сьогодні вивчимо щось нове!',
+  'Я вірю в тебе! 💪',
+  'Навчання — це весело!',
+];
+function updateHomeUI(){
+  document.getElementById('totalXP').textContent=S.xp;
+  document.getElementById('streakHome').textContent=S.streak;
+  const unl=S.unlockedAch.length;
+  document.getElementById('achCountHome').textContent=unl+'/'+ACH_DEFS.length;
+  document.getElementById('prog-abc').style.width=Math.min(100,Math.round(S.abc.correct/33*100))+'%';
+  document.getElementById('prog-num').style.width=Math.min(100,Math.round(S.num.correct/10*100))+'%';
+  document.getElementById('prog-shp').style.width=Math.min(100,Math.round(S.shp.correct/8*100))+'%';
+  document.getElementById('speechBubble').textContent=SPEECHES[Math.floor(Math.random()*SPEECHES.length)];
+}
+
+/* ═══════════════════════════════════════
+   START SUBJECT
+═══════════════════════════════════════ */
+const SUBJ_META = {
+  abc:{name:'Абетка 🔤',qLabel:'Яка це літера?',barClass:'prog-bar-abc',cardClass:'abc',btnClass:'',colorClass:'',bClass:''},
+  num:{name:'Цифри 🔢',qLabel:'Яка це цифра?',barClass:'prog-bar-num',cardClass:'num',btnClass:'num-style',colorClass:'num-color',bClass:'num-b'},
+  shp:{name:'Фігури 🔷',qLabel:'Яка це фігура?',barClass:'prog-bar-shp',cardClass:'shp',btnClass:'shp-style',colorClass:'shp-color',bClass:'shp-b'},
+};
+
+function startSubject(subj){
+  CUR_SUBJ=subj;
+  const meta=SUBJ_META[subj];
+  qNum=0;correct=0;lives=3;streak=0;locked=false;sessionXP=0;
+
+  // build queue
+  let data = subj==='abc'?ALPHA : subj==='num'?NUMS : SHAPES;
+  queue=shuffle(data);
+
+  // UI setup
+  document.getElementById('gameSubjectName').textContent=meta.name;
+  document.getElementById('qLabel').textContent=meta.qLabel;
+  const qCard=document.getElementById('qCard');
+  qCard.className='q-card '+meta.cardClass;
+  const pb=document.getElementById('gameProgBar');
+  pb.className='prog-bar-fg '+meta.barClass;
+  const nb=document.getElementById('nextBtn');
+  nb.className='next-btn '+meta.btnClass;
+
+  renderLives();
+  showScreen('game');
+  startQ(queue.shift());
+}
+function replaySubject(){ startSubject(CUR_SUBJ); }
+
+/* ═══════════════════════════════════════
+   RENDER QUESTION
+═══════════════════════════════════════ */
+function startQ(item){
+  locked=false;cur=item;qNum++;
+  const total = CUR_SUBJ==='abc'?ALPHA.length:CUR_SUBJ==='num'?NUMS.length:SHAPES.length;
+  document.getElementById('gameProgBar').style.width=(qNum-1)/total*100+'%';
+
+  const meta=SUBJ_META[CUR_SUBJ];
+  const ml=document.getElementById('mainLetter');
+  ml.className='main-letter '+meta.colorClass;
+  const nextBtn=document.getElementById('nextBtn');
+  nextBtn.className='next-btn '+meta.btnClass;
+  nextBtn.classList.remove('show');
+
+  const letterRow=document.getElementById('letterRow');
+  const divLine=document.getElementById('divLine');
+
+  if(CUR_SUBJ==='abc'){
+    ml.textContent=item.l;
+    ml.style.display='';
+    divLine.style.display='';
+    document.getElementById('picHint').style.display='';
+    document.getElementById('picEmoji').textContent=item.emoji;
+    const w=item.word;
+    document.getElementById('picWord').innerHTML='<b>'+w[0]+'</b>'+w.slice(1);
+    ml.classList.remove('pop');
+    void ml.offsetWidth;
+    ml.classList.add('pop');
+  } else if(CUR_SUBJ==='num'){
+    ml.textContent=item.l;
+    ml.style.display='';
+    divLine.style.display='';
+    document.getElementById('picHint').style.display='';
+    // dots
+    let dotsHtml='<div class="num-dots">';
+    for(let i=0;i<Math.min(item.dots,10);i++) dotsHtml+='<div class="num-dot"></div>';
+    dotsHtml+='</div>';
+    document.getElementById('picEmoji').outerHTML; // noop
+    const ph=document.getElementById('picHint');
+    ph.innerHTML=dotsHtml+'<div class="pic-word" id="picWord"><b class="num-b">'+item.word+'</b></div>';
+    ml.classList.remove('pop');
+    void ml.offsetWidth;
+    ml.classList.add('pop');
+  } else {
+    // shapes — show shape SVG as main, hide letter
+    ml.style.display='none';
+    divLine.style.display='none';
+    document.getElementById('picHint').style.display='none';
+    // replace with shape
+    let existing=document.getElementById('shapeMain');
+    if(existing)existing.remove();
+    const sd=document.createElement('div');
+    sd.id='shapeMain';
+    sd.className='shape-display';
+    sd.style.cssText='width:110px;height:110px;margin:0 auto';
+    sd.innerHTML='<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'+item.svg+'</svg>';
+    letterRow.appendChild(sd);
+    void sd.offsetWidth;
+    sd.style.animation='letterPop .45s cubic-bezier(.34,1.56,.64,1)';
+  }
+
+  // build choices
+  let pool = CUR_SUBJ==='abc'?ALPHA:CUR_SUBJ==='num'?NUMS:SHAPES;
+  const wrongs=shuffle(pool.filter(x=>x.l!==item.l)).slice(0,3);
+  const opts=shuffle([item,...wrongs]);
+  const el=document.getElementById('choices');
+  el.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='choice';
+    btn.dataset.l=opt.l;
+    if(CUR_SUBJ==='shp'){
+      btn.innerHTML=`<div class="choice-shape"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${opt.svg}</svg></div><div class="choice-sub">${opt.l}</div>`;
+    } else {
+      const bClass=meta.bClass;
+      btn.innerHTML=`<div class="choice-main">${opt.l}</div><div class="choice-sub">${opt.word}</div>`;
+    }
+    btn.onclick=()=>pick(btn,opt.l===item.l);
+    el.appendChild(btn);
+  });
+}
+
+/* ═══════════════════════════════════════
+   PICK
+═══════════════════════════════════════ */
+function pick(btn,isCorrect){
+  if(locked)return;
+  locked=true;
+  const all=document.querySelectorAll('.choice');
+  if(isCorrect){
+    btn.classList.add('correct','locked');
+    all.forEach(b=>{if(b!==btn)b.classList.add('dim','locked');});
+    correct++;streak++;
+    S.streak++;S.maxStreak=Math.max(S.maxStreak,S.streak);
+    const xp=10+Math.min(streak-1,5)*2;
+    sessionXP+=xp;S.xp+=xp;
+    S[CUR_SUBJ].correct=Math.max(S[CUR_SUBJ].correct,correct);
+    save();
+    showToast(true,xp);
+    playOK();
+    if(streak%3===0)confetti();
+    checkAchievements();
+  } else {
+    btn.classList.add('wrong','locked');
+    S.streak=0;streak=0;
+    all.forEach(b=>{
+      if(b.dataset.l===cur.l)b.classList.add('correct','locked');
+      else if(b!==btn)b.classList.add('dim','locked');
+    });
+    lives--;
+    renderLives();
+    save();
+    showToast(false,0);
+    playWrong();
+  }
+  document.getElementById('streakHome').textContent=S.streak;
+  setTimeout(()=>document.getElementById('nextBtn').classList.add('show'),650);
+}
+
+/* ═══════════════════════════════════════
+   NEXT
+═══════════════════════════════════════ */
+function nextQ(){
+  // clean up shape
+  const sd=document.getElementById('shapeMain');
+  if(sd)sd.remove();
+  // restore picHint id in case num replaced it
+  const ph=document.getElementById('picHint');
+  if(ph&&!document.getElementById('picEmoji')){
+    ph.innerHTML='<div class="pic-emoji" id="picEmoji">🍉</div><div class="pic-word" id="picWord"><b>А</b></div>';
+  }
+
+  if(queue.length===0||lives<=0){
+    showFinish();
+    return;
+  }
+  startQ(queue.shift());
+}
+
+/* ═══════════════════════════════════════
+   LIVES
+═══════════════════════════════════════ */
+function renderLives(){
+  const el=document.getElementById('lives');
+  el.innerHTML='';
+  for(let i=0;i<3;i++){
+    const s=document.createElement('span');
+    s.className='heart'+(i>=lives?' lost':'');
+    s.textContent='❤️';
+    el.appendChild(s);
+  }
+}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+const PRAISE=['Молодець! 🌟','Чудово! 🎉','Супер! 🏆','Бравo! ⚡','Клас! 💫','Правильно! 💪'];
+const WRONGS=['Спробуй ще 💙','Майже! 🌈','Не здавайся 😊'];
+let toastTimer;
+function showToast(ok,xp){
+  const t=document.getElementById('toast');
+  const em=document.getElementById('toastEmoji');
+  const tx=document.getElementById('toastText');
+  const xpEl=document.getElementById('toastXP');
+  if(ok){
+    em.textContent=['🎉','⭐','🌟','💫','🏆','🎊'][Math.floor(Math.random()*6)];
+    tx.textContent=PRAISE[Math.floor(Math.random()*PRAISE.length)];
+    tx.style.color='#065F46';
+    xpEl.textContent='+'+xp+' XP';
+    xpEl.style.display='';
+  } else {
+    em.textContent=['💙','🌈','😊'][Math.floor(Math.random()*3)];
+    tx.textContent=WRONGS[Math.floor(Math.random()*WRONGS.length)];
+    tx.style.color='#D44E1A';
+    xpEl.style.display='none';
+  }
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),1200);
+}
+
+/* ═══════════════════════════════════════
+   FINISH
+═══════════════════════════════════════ */
+function showFinish(){
+  const total=CUR_SUBJ==='abc'?ALPHA.length:CUR_SUBJ==='num'?NUMS.length:SHAPES.length;
+  S[CUR_SUBJ].sessions++;
+  save();
+  checkAchievements();
+  const pct=correct/total;
+  let trophy='🏆',title='Чудово!';
+  if(pct>=1){trophy='🥇';title='Ідеально!'}
+  else if(pct>=.7){trophy='🥈';title='Молодець!'}
+  else{trophy='🥉';title='Продовжуй!'}
+  document.getElementById('finTrophy').textContent=trophy;
+  document.getElementById('finTitle').textContent=title;
+  document.getElementById('finScore').innerHTML='Правильних: <b>'+correct+'/'+total+'</b>';
+  document.getElementById('finXP').textContent='⭐ +'+sessionXP+' XP';
+  document.getElementById('finishOverlay').classList.add('show');
+  if(correct===total){confetti();setTimeout(confetti,500);}
+}
+
+/* ═══════════════════════════════════════
+   ACHIEVEMENTS
+═══════════════════════════════════════ */
+function checkAchievements(){
+  ACH_DEFS.forEach(def=>{
+    if(!S.unlockedAch.includes(def.id)&&def.check(S)){
+      S.unlockedAch.push(def.id);
+      save();
+      setTimeout(()=>showAchPopup(def),800);
+    }
+  });
+  document.getElementById('achCountHome').textContent=S.unlockedAch.length+'/'+ACH_DEFS.length;
+  document.getElementById('totalXP').textContent=S.xp;
+}
+
+function showAchPopup(def){
+  document.getElementById('achPopIcon').textContent=def.icon;
+  document.getElementById('achPopName').textContent=def.name;
+  const p=document.getElementById('achPopup');
+  p.classList.add('show');
+  tone(1047,.15);setTimeout(()=>tone(1319,.2),160);setTimeout(()=>tone(1568,.3),340);
+  setTimeout(()=>p.classList.remove('show'),3000);
+}
+
+function renderAchList(){
+  const el=document.getElementById('achList');
+  el.innerHTML='';
+  ACH_DEFS.forEach(def=>{
+    const done=S.unlockedAch.includes(def.id);
+    const card=document.createElement('div');
+    card.className='ach-card';
+    const iconBg=done?'background:'+def.color:'';
+    card.innerHTML=`
+      <div class="ach-icon-wrap ${done?'unlocked':'locked'}" style="${iconBg}">${def.icon}</div>
+      <div class="ach-info">
+        <div class="ach-name">${def.name}</div>
+        <div class="ach-desc">${def.desc}</div>
+      </div>
+      <div class="ach-badge ${done?'done':'todo'}">${done?'✅ Є':'🔒'}</div>`;
+    el.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════
+   CONFETTI
+═══════════════════════════════════════ */
+function confetti(){
+  const cols=['#FF6B35','#9C6FE4','#26C6DA','#FFD93D','#4CAF50','#FF6BA8'];
+  for(let i=0;i<32;i++)setTimeout(()=>{
+    const c=document.createElement('div');
+    c.className='cf';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=cols[Math.floor(Math.random()*cols.length)];
+    c.style.animationDuration=(1.5+Math.random()*2)+'s';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  },i*45);
+}
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+load();
+updateHomeUI();
+</script>
+</body>
+</html>
