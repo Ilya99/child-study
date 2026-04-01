@@ -530,17 +530,17 @@ body{
    DATA
 ═══════════════════════════════════════ */
 const ALPHA = [
-  {l:'А',word:'Арбуз',emoji:'🍉'},
+  {l:'А',word:'Ананас',emoji:'🍍'},
   {l:'Б',word:'Бджола',emoji:'🐝'},
   {l:'В',word:'Вовк',emoji:'🐺'},
   {l:'Г',word:'Гриб',emoji:'🍄'},
   {l:'Ґ',word:'Ґудзик',emoji:'🔘'},
   {l:'Д',word:'Дерево',emoji:'🌳'},
-  {l:'Е',word:'Енот',emoji:'🦝'},
-  {l:'Є',word:'Єжак',emoji:'🦔'},
+  {l:'Е',word:'Ескімо',emoji:'🍦'},
+  {l:'Є',word:'Єнот',emoji:'🦝'},
   {l:'Ж',word:'Жираф',emoji:'🦒'},
   {l:'З',word:'Зірка',emoji:'⭐'},
-  {l:'И',word:'Іграшка',emoji:'🧸'},
+  {l:'И',word:'Ирис',emoji:'🍬'},
   {l:'І',word:'Індик',emoji:'🦃'},
   {l:'Ї',word:'Їжак',emoji:'🦔'},
   {l:'Й',word:'Йогурт',emoji:'🥛'},
@@ -555,7 +555,7 @@ const ALPHA = [
   {l:'Т',word:'Тигр',emoji:'🐯'},
   {l:'У',word:'Удав',emoji:'🐍'},
   {l:'Ф',word:'Фламінго',emoji:'🦩'},
-  {l:'Х',word:'Хомяк',emoji:'🐹'},
+  {l:'Х',word:"Хом'як",emoji:'🐹'},
   {l:'Ц',word:'Цибуля',emoji:'🧅'},
   {l:'Ч',word:'Черепаха',emoji:'🐢'},
   {l:'Ш',word:'Шапка',emoji:'🎩'},
@@ -634,7 +634,18 @@ function save(){ try{ localStorage.setItem('navchajko_v2',JSON.stringify(S)); }c
 function load(){
   try{
     const raw = localStorage.getItem('navchajko_v2');
-    if(raw){ const d=JSON.parse(raw); S={...defaultState(),...d}; }
+    if(raw){
+      const d=JSON.parse(raw);
+      const base=defaultState();
+      S={
+        ...base,
+        ...d,
+        abc:{...base.abc,...(d.abc||{})},
+        num:{...base.num,...(d.num||{})},
+        shp:{...base.shp,...(d.shp||{})},
+        unlockedAch:Array.isArray(d.unlockedAch)?d.unlockedAch:[]
+      };
+    }
   }catch(e){}
 }
 
@@ -645,7 +656,17 @@ let CUR_SUBJ='abc';
 let queue=[],cur=null,qNum=0,correct=0,lives=3,streak=0,locked=false;
 let sessionXP=0;
 
-function shuffle(a){return[...a].sort(()=>Math.random()-.5)}
+function totalForSubject(subj){
+  return subj==='abc' ? ALPHA.length : subj==='num' ? NUMS.length : SHAPES.length;
+}
+function shuffle(a){
+  const arr=[...a];
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
 
 /* ═══════════════════════════════════════
    AUDIO
@@ -737,12 +758,20 @@ function startSubject(subj){
 }
 function replaySubject(){ startSubject(CUR_SUBJ); }
 
+function restorePicHint(){
+  const ph=document.getElementById('picHint');
+  if(ph){
+    ph.innerHTML='<div class="pic-emoji" id="picEmoji">🍉</div><div class="pic-word" id="picWord"><b>А</b>рбуз</div>';
+    ph.style.display='';
+  }
+}
+
 /* ═══════════════════════════════════════
    RENDER QUESTION
 ═══════════════════════════════════════ */
 function startQ(item){
   locked=false;cur=item;qNum++;
-  const total = CUR_SUBJ==='abc'?ALPHA.length:CUR_SUBJ==='num'?NUMS.length:SHAPES.length;
+  const total = totalForSubject(CUR_SUBJ);
   document.getElementById('gameProgBar').style.width=(qNum-1)/total*100+'%';
 
   const meta=SUBJ_META[CUR_SUBJ];
@@ -754,6 +783,10 @@ function startQ(item){
 
   const letterRow=document.getElementById('letterRow');
   const divLine=document.getElementById('divLine');
+
+  const oldShape=document.getElementById('shapeMain');
+  if(oldShape) oldShape.remove();
+  restorePicHint();
 
   if(CUR_SUBJ==='abc'){
     ml.textContent=item.l;
@@ -775,7 +808,6 @@ function startQ(item){
     let dotsHtml='<div class="num-dots">';
     for(let i=0;i<Math.min(item.dots,10);i++) dotsHtml+='<div class="num-dot"></div>';
     dotsHtml+='</div>';
-    document.getElementById('picEmoji').outerHTML; // noop
     const ph=document.getElementById('picHint');
     ph.innerHTML=dotsHtml+'<div class="pic-word" id="picWord"><b class="num-b">'+item.word+'</b></div>';
     ml.classList.remove('pop');
@@ -834,7 +866,8 @@ function pick(btn,isCorrect){
     S.streak++;S.maxStreak=Math.max(S.maxStreak,S.streak);
     const xp=10+Math.min(streak-1,5)*2;
     sessionXP+=xp;S.xp+=xp;
-    S[CUR_SUBJ].correct=Math.max(S[CUR_SUBJ].correct,correct);
+    S[CUR_SUBJ].correct=Math.min(totalForSubject(CUR_SUBJ), S[CUR_SUBJ].correct + 1);
+    S[CUR_SUBJ].best=Math.max(S[CUR_SUBJ].best, correct);
     save();
     showToast(true,xp);
     playOK();
@@ -861,14 +894,9 @@ function pick(btn,isCorrect){
    NEXT
 ═══════════════════════════════════════ */
 function nextQ(){
-  // clean up shape
   const sd=document.getElementById('shapeMain');
   if(sd)sd.remove();
-  // restore picHint id in case num replaced it
-  const ph=document.getElementById('picHint');
-  if(ph&&!document.getElementById('picEmoji')){
-    ph.innerHTML='<div class="pic-emoji" id="picEmoji">🍉</div><div class="pic-word" id="picWord"><b>А</b></div>';
-  }
+  restorePicHint();
 
   if(queue.length===0||lives<=0){
     showFinish();
@@ -923,7 +951,7 @@ function showToast(ok,xp){
    FINISH
 ═══════════════════════════════════════ */
 function showFinish(){
-  const total=CUR_SUBJ==='abc'?ALPHA.length:CUR_SUBJ==='num'?NUMS.length:SHAPES.length;
+  const total=totalForSubject(CUR_SUBJ);
   S[CUR_SUBJ].sessions++;
   save();
   checkAchievements();
@@ -936,6 +964,7 @@ function showFinish(){
   document.getElementById('finTitle').textContent=title;
   document.getElementById('finScore').innerHTML='Правильних: <b>'+correct+'/'+total+'</b>';
   document.getElementById('finXP').textContent='⭐ +'+sessionXP+' XP';
+  updateHomeUI();
   document.getElementById('finishOverlay').classList.add('show');
   if(correct===total){confetti();setTimeout(confetti,500);}
 }
